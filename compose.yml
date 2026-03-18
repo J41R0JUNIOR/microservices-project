@@ -1,8 +1,35 @@
 services:
   rabbitmq:
-    image: 'rabbitmq:latest'
-    environment:
-      - 'RABBITMQ_DEFAULT_PASS=secret'
-      - 'RABBITMQ_DEFAULT_USER=myuser'
-    ports:
-      - '5672'
+    extends:
+      file: ./infra/docker-compose.yml
+      service: rabbitmq
+
+  postgres-order:
+    extends:
+      file: ./infra/docker-compose.yml
+      service: postgres-order
+
+  postgres-product:
+    extends:
+      file: ./infra/docker-compose.yml
+      service: postgres-product
+
+  order-service:
+    extends:
+      file: ./order-service/docker-compose.yml
+      service: order-service
+    depends_on:
+      - rabbitmq
+      - postgres-order
+
+  product-service:
+    extends:
+      file: ./product-service/docker-compose.yml
+      service: product-service
+    depends_on:
+      - rabbitmq
+      - postgres-product
+
+networks:
+  microservices-net:
+    name: microservices-net
