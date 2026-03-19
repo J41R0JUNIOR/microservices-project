@@ -2,11 +2,15 @@ package com.order_service.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.order_service.domain.models.Order;
+import com.order_service.domain.dto.OrderRequestDto;
+import com.order_service.domain.dto.OrderResponseDto;
 import com.order_service.service.OrderService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/orders")
@@ -15,7 +19,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public Order createOrder() {
-        return orderService.createOrder();
+    public  OrderResponseDto createOrder(@Valid @RequestBody OrderRequestDto data) {
+        return orderService.createOrder(data);
     }
 }

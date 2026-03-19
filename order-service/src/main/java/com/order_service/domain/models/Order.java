@@ -1,7 +1,10 @@
 package com.order_service.domain.models;
+
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.order_service.domain.dto.OrderRequestDto;
 import com.order_service.domain.enums.OrderStatus;
 
 import jakarta.persistence.CascadeType;
@@ -17,8 +20,9 @@ import lombok.Data;
 @AllArgsConstructor
 @Entity
 public class Order {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String createdAt;
     private String updatedAt;
@@ -29,4 +33,23 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     @JsonManagedReference
     private List<Item> items;
+
+    public Order(OrderRequestDto data) {
+        String date = new Date().toString();
+
+        this.createdAt = date;
+        this.updatedAt = date;
+        this.buyerId = data.buyerId();
+        this.totalAmount = data.totalAmount();
+        this.status = OrderStatus.CREATED;
+
+        if (data.items().isEmpty()) {
+            throw new IllegalArgumentException("Order must have at least one item.");
+        }
+
+        this.items = data.items()
+            .stream()
+            .map(item -> new Item(item, this))
+            .toList();
+    }
 }

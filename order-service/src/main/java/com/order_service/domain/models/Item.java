@@ -1,6 +1,7 @@
 package com.order_service.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.order_service.domain.dto.ItemRequestDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,4 +26,23 @@ public class Item {
     @JoinColumn(name = "order_id")
     @JsonBackReference
     private Order order;
+
+    public Item(ItemRequestDto data, Order order) {
+        this.quantity = data.quantity();
+        this.price = data.price();
+        this.order = order;
+        this.validateItem();
+    }
+
+    private void validateItem() {
+        if (this.quantity == null || this.quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
+        if (this.price == null || this.price < 0) {
+            throw new IllegalArgumentException("Price must be greater than or equal to 0");
+        }
+        if (this.order == null) {
+            throw new IllegalArgumentException("Order must not be null");
+        }
+    }
 }
