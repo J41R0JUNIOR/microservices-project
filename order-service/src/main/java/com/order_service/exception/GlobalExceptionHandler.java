@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .toList();
 
-        body.put("errors", errors);
+        body.put(ex.getObjectName(), errors);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

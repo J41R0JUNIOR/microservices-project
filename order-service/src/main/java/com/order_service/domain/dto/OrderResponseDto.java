@@ -23,7 +23,7 @@ public record OrderResponseDto(
             data.getBuyerId(),
             data.getStatus(),
             data.getTotalAmount(),
-            data.getItems().stream().map(ItemResponseDto::new).toList()
+            data.getItems().stream().map(item -> new ItemResponseDto(item)).toList()
         );
     }
 }

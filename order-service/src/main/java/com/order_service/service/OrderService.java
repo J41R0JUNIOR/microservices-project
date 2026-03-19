@@ -1,5 +1,7 @@
 package com.order_service.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +16,15 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public OrderResponseDto createOrder(OrderRequestDto data) {
-
         Order order = new Order(data);
-        linkItemsToOrder(order);
+        Order repoOrder = orderRepository.save(order);
 
-        Order response = orderRepository.save(order);
-
-        response.setItems(order.getItems());
-
-        return new OrderResponseDto(response);
+        return new OrderResponseDto(repoOrder);
     }
 
-    private void linkItemsToOrder(Order order) {
-        order.getItems().forEach(item -> item.setOrder(order));
+    public List<OrderResponseDto> getAllOrders() {
+        List<Order> repoOrders = orderRepository.findAll();
+
+        return repoOrders.stream().map(OrderResponseDto::new).toList();
     }
 }
