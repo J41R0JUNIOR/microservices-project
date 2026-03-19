@@ -15,6 +15,18 @@ services:
     networks:
       - microservices-net
 
+  postgres-order:
+    image: postgres:15
+    container_name: postgres-order
+    environment:
+      POSTGRES_DB: orderdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - microservices-net
+
 networks:
   microservices-net:
     external: true

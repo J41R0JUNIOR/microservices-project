@@ -15,6 +15,18 @@ services:
     networks:
       - microservices-net
 
+  postgres-product:
+    image: postgres:15
+    container_name: postgres-product
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    networks:
+      - microservices-net
+
 networks:
   microservices-net:
     external: true

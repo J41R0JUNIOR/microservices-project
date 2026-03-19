@@ -1,22 +1,29 @@
 services:
   rabbitmq:
-    extends:
-      file: ./infra/docker-compose.yml
-      service: rabbitmq
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: myuser
+      RABBITMQ_DEFAULT_PASS: secret
+    networks:
+      - microservices-net
 
   postgres-order:
     extends:
-      file: ./infra/docker-compose.yml
+      file: ./order-service/compose.yml
       service: postgres-order
 
   postgres-product:
     extends:
-      file: ./infra/docker-compose.yml
+      file: ./product-service/compose.yml
       service: postgres-product
 
   order-service:
     extends:
-      file: ./order-service/docker-compose.yml
+      file: ./order-service/compose.yml
       service: order-service
     depends_on:
       - rabbitmq
@@ -24,7 +31,7 @@ services:
 
   product-service:
     extends:
-      file: ./product-service/docker-compose.yml
+      file: ./product-service/compose.yml
       service: product-service
     depends_on:
       - rabbitmq
