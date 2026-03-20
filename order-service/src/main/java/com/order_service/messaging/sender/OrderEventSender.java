@@ -13,11 +13,8 @@ public class OrderEventSender {
     @Autowired
     private RabbitTemplate template;
 
-    @Autowired
-    private Queue queue;
-
     public void dispatchNewOrderEvent(OrderCreatedEvent event) {
-        this.template.convertAndSend(queue.getName(), event);
+        this.template.convertAndSend("order-queue", event);
         System.out.println("Sent message: " + event);
     }
 }

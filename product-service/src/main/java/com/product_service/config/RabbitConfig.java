@@ -14,7 +14,7 @@ public class RabbitConfig {
 
     @Bean
     public Queue orderQueue() {
-        return QueueBuilder.durable("product-queue").quorum().build();
+        return QueueBuilder.durable("order-queue").quorum().build();
     }
 
     @Bean

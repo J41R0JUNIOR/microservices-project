@@ -13,8 +13,13 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
 
     @Bean
-    public Queue orderQueue() {
-        return QueueBuilder.durable("order-queue").quorum().build();
+    public Queue productSuccessQueue() {
+        return QueueBuilder.durable("product-success-queue").quorum().build();
+    }
+
+    @Bean
+    public Queue productFailureQueue() {
+        return QueueBuilder.durable("product-failure-queue").quorum().build();
     }
 
     @Bean

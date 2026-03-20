@@ -40,7 +40,8 @@ public class ProductService {
     public void handleOrderCreated(OrderReceivedEvent event) {
         try {
             for (ItemReceivedEvent item : event.items()) {
-                Product product = productRepository.findById(item.id())
+                System.out.println("Processing item: " + item.productId() + ", quantity: " + item.quantity());
+                Product product = productRepository.findById(item.productId())
                         .orElseThrow();
 
                 product.decreaseStock(item.quantity());

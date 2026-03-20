@@ -23,6 +23,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy= GenerationType.UUID)
     private String id;
+    private String productId;
     private Integer quantity;
     private Integer price;
 
@@ -33,6 +34,7 @@ public class Item {
 
     public Item(ItemRequestDto data, Order order) {
         this.quantity = data.quantity();
+        this.productId = data.productId();
         this.price = data.price();
         this.order = order;
         this.validateItem();

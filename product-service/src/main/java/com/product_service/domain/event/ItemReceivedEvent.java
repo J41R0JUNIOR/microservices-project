@@ -1,7 +1,7 @@
 package com.product_service.domain.event;
 
 public record ItemReceivedEvent (
-    String id,
+    String productId,
     Integer quantity,
     Integer price
 ) { }
