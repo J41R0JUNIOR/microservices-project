@@ -7,15 +7,13 @@ import com.order_service.domain.models.Order;
 import jakarta.validation.Valid;
 
 public record OrderCreatedEvent(
-        String buyerId,
-        Integer totalAmount,
+        String orderId,
         List<@Valid ItemCreatedEvent> items
         ) {
 
     public OrderCreatedEvent(Order data) {
         this(
-                data.getBuyerId(),
-                data.getTotalAmount(),
+                data.getId(),
                 data.getItems()
                         .stream()
                         .map(item -> new ItemCreatedEvent(item))

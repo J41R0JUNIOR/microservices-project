@@ -19,12 +19,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping("/create")
+    @PostMapping
     public OrderResponseDto createOrder(@Valid @RequestBody OrderRequestDto data) {
         return orderService.createOrder(data);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public Iterable<OrderResponseDto> getAllOrders() {
         return orderService.getAllOrders();
     }
