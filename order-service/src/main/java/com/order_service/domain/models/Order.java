@@ -24,7 +24,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -52,8 +51,8 @@ public class Order {
         }
 
         this.items = data.items()
-            .stream()
-            .map(item -> new Item(item, this))
-            .toList();
+                .stream()
+                .map(item -> new Item(item, this))
+                .toList();
     }
 }

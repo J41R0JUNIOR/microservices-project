@@ -2,27 +2,30 @@ package com.order_service.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.JacksonJsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.order_service.messaging.OrderEventConsumer;
-import com.order_service.messaging.OrderEventProducer;
 
 @Configuration
 public class RabbitConfig {
 
-    @Bean 
+    @Bean
     public Queue orderQueue() {
         return QueueBuilder.durable("order-queue").quorum().build();
     }
 
-    @Bean 
-    public OrderEventConsumer receiver() {
-        return new OrderEventConsumer();
+    @Bean
+    public MessageConverter messageConverter() {
+        return new JacksonJsonMessageConverter();
     }
 
     @Bean
-    public OrderEventProducer sender() {
-        return new OrderEventProducer();
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(messageConverter());
+        return template;
     }
 }

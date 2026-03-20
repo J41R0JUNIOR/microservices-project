@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.order_service.domain.dto.OrderCreatedEvent;
 import com.order_service.domain.dto.OrderRequestDto;
 import com.order_service.domain.dto.OrderResponseDto;
 import com.order_service.domain.models.Order;
 import com.order_service.domain.repository.OrderRepository;
-import com.order_service.messaging.OrderEventProducer;
+import com.order_service.messaging.OrderEventSender;
 
 @Service
 public class OrderService {
@@ -17,15 +18,16 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private OrderEventProducer orderEventProducer;
+    private OrderEventSender orderEventProducer;
 
     public OrderResponseDto createOrder(OrderRequestDto data) {
         Order order = new Order(data);
-        Order repoOrder = orderRepository.save(order);
+        orderRepository.save(order);
 
-        orderEventProducer.sendMessage();
+        OrderCreatedEvent event = new OrderCreatedEvent(order);
+        orderEventProducer.dispatchNewOrderEvent(event);
 
-        return new OrderResponseDto(repoOrder);
+        return new OrderResponseDto(order);
     }
 
     public List<OrderResponseDto> getAllOrders() {
